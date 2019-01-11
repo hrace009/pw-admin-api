@@ -1,0 +1,16 @@
+{
+    "name": "api/pw-admin",
+    "authors": [
+        {
+            "name": "Thalys A. Wolf",
+            "email": "thalyswolf01@gmail.com"
+        }
+    ],
+    "require": {
+    	"slim/slim":"3.0"
+    },
+    "autoload": {
+       "classmap":["classes/"]
+    }
+
+}
