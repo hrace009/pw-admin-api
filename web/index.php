@@ -56,7 +56,7 @@ $app->get('/{class}/{method}', function (ServerRequestInterface $request, Respon
       return $response->withStatus(404, 'Not found');
     }
     if (method_exists($res, $method)) {
-      $res->{$method}();
+      $response->getBody()->write(json_encode($res->{$method}(), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
     }else{
       return $response->withStatus(404, 'Not found');
     }
@@ -143,10 +143,11 @@ $app->post('/auth',  function (ServerRequestInterface $request, ResponseInterfac
 });
 
 //MIDDLEWARE
-// $app->add(function($request, $response, $next) {
-//     $response = $next($request, $response);
-//     return $response->withHeader('Content-Type', 'application/json');
-// });
+$app->add(function($request, $response, $next) {
+    $response = $next($request, $response);
+    return $response->withHeader('Content-Type', 'application/json');
+});
+
 /* Thalys
 * Middleware abaixo valida o token do cabeçalho
 * Se o token for inválido ele já informa o status e uma mensagem.

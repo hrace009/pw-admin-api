@@ -23,30 +23,7 @@ class Auth extends ClassDB implements InterfaceConfig {
     $aBind[':usuario'] = $this->user;
     $aBind[':senha'] = $this->pass;
 
-    $sql = 'SELECT DISTINCT usu.codusuario
-                 , usu.nome
-                 , usu.usuario
-                 , usu.datahora
-                 , usu.senha
-                 , (SELECT DISTINCT ru.codRevenda
-                      FROM '.DB_NAME.'.btv_sis_usuarios_revendas ru
-                     WHERE ru.codUsuario = usu.codusuario LIMIT 1 ) codrevenda
-                 , usu.email
-                 , usu.situacao
-                 , usu.consultorresponsavel
-                 , usu.cod_setor
-                 , CONCAT("[", (SELECT GROUP_CONCAT( DISTINCT ru.codRevenda)
-                                FROM '.DB_NAME.'.btv_sis_usuarios_revendas ru
-                                WHERE ru.codUsuario = usu.codusuario ) ,"]") revendas
-
-                 , CONCAT("[", (SELECT GROUP_CONCAT(DISTINCT g.codgrupo)
-                                 FROM '.DB_NAME.'.btv_sis_grupos_usuarios g
-                                WHERE g.codusuario = usu.codusuario )  ,"]") grupos
-
-              FROM '.DB_NAME.'.btv_sis_usuarios usu
-              LEFT JOIN '.DB_NAME.'.btv_sis_usuarios_revendas r ON r.codUsuario = usu.codusuario
-             WHERE usu.usuario = :usuario
-               AND usu.senha = :senha';
+    $sql = 'buscar usuario';
 
     $curentUser = $this->select($sql, $aBind);
     unset($aBind);
@@ -81,28 +58,7 @@ class Auth extends ClassDB implements InterfaceConfig {
 
     $aBind[':codusuario'] = $payload->user;
 
-    $sql = 'SELECT DISTINCT usu.codusuario
-                 , usu.nome
-                 , usu.usuario
-                 , usu.datahora
-                 , (SELECT DISTINCT ru.codRevenda
-                      FROM '.DB_NAME.'.btv_sis_usuarios_revendas ru
-                     WHERE ru.codUsuario = usu.codusuario LIMIT 1 ) codrevenda
-                 , usu.email
-                 , usu.situacao
-                 , usu.consultorresponsavel
-                 , usu.cod_setor
-                 , CONCAT("[", (SELECT GROUP_CONCAT( DISTINCT ru.codRevenda)
-                                FROM '.DB_NAME.'.btv_sis_usuarios_revendas ru
-                                WHERE ru.codUsuario = usu.codusuario ) ,"]") revendas
-
-                 , CONCAT("[", (SELECT GROUP_CONCAT(DISTINCT g.codgrupo)
-                                 FROM '.DB_NAME.'.btv_sis_grupos_usuarios g
-                                WHERE g.codusuario = usu.codusuario )  ,"]") grupos
-
-              FROM btv_sis_usuarios usu
-              LEFT JOIN btv_sis_usuarios_revendas r ON r.codUsuario = usu.codusuario
-             WHERE usu.codusuario = :codusuario AND situacao = 0';
+    $sql = 'buscar usuário';
 
     $user = ClassDB::select($sql,$aBind);
     unset($aBind);

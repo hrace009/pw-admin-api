@@ -3,8 +3,9 @@
   class User extends ClassDB implements InterfaceConfig{
     use Api;
     private $protected = false;
-    function __construct(){
-    }
+
+    private $lista = array();
+
     public function get_protected(){
       return $this->protected;
     }
@@ -59,6 +60,46 @@
       }
     }
 
+    public function get(){
+      $this->validateRequest(GET);
+      $sSql = '
+              SELECT
+                id
+                name,
+                truename,
+                email
+              FROM
+                  users
+              LIMIT 30;
+      ';
+
+      $res = $this->select($sSql);
+      $this->lista['previous'] = null;
+      $this->lista['next'] = $_SERVER['HTTP_HOST'].'/user/page/1';
+      $this->lista['users'] = $res;
+      return $this->lista;
+    }
+
+    public function get_user_detail($id){
+      $this->validateRequest(GET);
+      $aBind[':id'] = $id;
+      $sSql = '
+              SELECT
+                *
+              FROM
+                  users
+              WHERE
+                id = :id
+      ';
+
+      $res = $this->select($sSql, $aBind);
+      
+      return $res;
+    }
+
+    public function page(){
+
+    }
 
     private function getUserByName($name){
       $aBind[':name'] = $name;
