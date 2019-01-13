@@ -1,6 +1,6 @@
 <?php
 
-  abstract class ClassDB{
+  abstract class ClassDB implements InterfaceConfig{
 
     static $host = DB_HOST;
     static $username = DB_USER;
@@ -17,6 +17,10 @@
       self::$username = DB_USER;
       self::$password = DB_PASSWORD;
       self::$namedb = DB_NAME;
+    }
+
+    public function get_protected(){
+      return $this->protected;
     }
 
     public static function getConn(){
@@ -108,7 +112,7 @@
     }
 
 
-    // function __destruct(){
+    // public function __destruct(){
     //   $this->con->close();
     // }
   }

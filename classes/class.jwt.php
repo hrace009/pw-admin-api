@@ -1,7 +1,7 @@
 <?php
-class JWT
-{
+class JWT implements InterfaceConfig{
     use Api;
+    private $protected = true;
     public static $leeway = 0;
 
     public static $timestamp = null;
@@ -14,9 +14,12 @@ class JWT
         'RS512' => array('openssl', 'SHA512'),
     );
 
+    public function get_protected(){
+      return $this->protected;
+    }
 
     public static function decode($jwt, $key, array $allowed_algs = array()){
-        
+
         $timestamp = is_null(static::$timestamp) ? time() : static::$timestamp;
         if (empty($key)){
           self::throwError(403, 'Token está vazio', 'ACCESS_TOKEN_ERRORS');

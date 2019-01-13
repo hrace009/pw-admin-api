@@ -10,7 +10,7 @@ require '../vendor/autoload.php';
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
-
+include('../classes/includes/consts.php');
 
 $app = new Slim\App();
 
@@ -23,7 +23,7 @@ $app->get('/', function () {
 // URL local http://pw-admin.thalys.com/{nome da classe}/{metodo}/{parametro único}
 $app->get('/{class}', function (ServerRequestInterface $request, ResponseInterface $response, $args) {
 
-  $_SESSION['Auth'] = $request->getHeader('Auth')[0];
+  // $_SESSION['Auth'] = $request->getHeader('Auth')[0];
 
   $class = $args['class'];
   $class = ucfirst($class);
