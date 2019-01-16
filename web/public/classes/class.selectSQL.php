@@ -1,7 +1,7 @@
 <?php
   /* @Thalys A. Wolf
     * Em construção, essa classe vai montar os SQL para SELECT
-  */
+  
   class selectSQL extends ClassDB {
     private $propriedades;
     private $colunas = [];
@@ -30,6 +30,8 @@
     }
 
   }
+
+  */
 
 
  ?>
