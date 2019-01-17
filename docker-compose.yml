@@ -7,7 +7,7 @@ services:
             - "10:80"
             - "3001:443"
         volumes:
-        - /var/run/docker.sock:/tmp/docker.sock:ro
+            - /var/run/docker.sock:/tmp/docker.sock:ro
 
     pwadmin:
         container_name: container-  
@@ -28,6 +28,7 @@ services:
 
         links:
             - mysql
+            - php
         tty: true
     myadmin:
         image: phpmyadmin/phpmyadmin
@@ -64,7 +65,9 @@ services:
             - "./data/db/mysql:/var/lib/mysql"
 
     php:
+        image: nanoninja/php-fpm:latest
+        volumes:
+            - "./web:/var/www/html"
         container_name: container-php-pw
-        build: .
         restart: always
         tty: true
