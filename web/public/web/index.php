@@ -3,8 +3,6 @@
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: *");
 
-session_start();
-
 require '../vendor/autoload.php';
 
 use Psr\Http\Message\ServerRequestInterface;
@@ -152,34 +150,32 @@ $app->add(function($request, $response, $next) {
 * Middleware abaixo valida o token do cabeçalho
 * Se o token for inválido ele já informa o status e uma mensagem.
 */
-// $app->add(function ($request, $response, $next) {
-//
-//   if($_SERVER['REQUEST_METHOD'] == 'OPTIONS'){
-//
-//     $response->write('{}');
-//
-//   }else{
-//     if ($_SERVER['REQUEST_URI'] !== '/auth') {
-//
-//       $token = $request->getHeader('Auth');
-//
-//       $_SERVER['REDIRECT_HTTP_AUTH'] = isset($_SERVER['REDIRECT_HTTP_AUTH']) ? $_SERVER['REDIRECT_HTTP_AUTH']: null;
-//
-//       $token = isset($token[0]) ? $token[0] : $_SERVER['REDIRECT_HTTP_AUTH'];
-//
-//       $_SESSION['Auth'] = $token;
-//
-//       Auth::validateToken($token);
-//       $response = $next($request, $response);
-//
-//     }else{
-//       $response = $next($request, $response);
-//     }
-//
-//   }
-//
-//   return $response;
-// });
+$app->add(function ($request, $response, $next) {
+
+  if($_SERVER['REQUEST_METHOD'] == 'OPTIONS'){
+
+    $response->write('{}');
+
+  }else{
+    if ($_SERVER['REQUEST_URI'] !== '/auth') {
+
+      $token = $request->getHeader('Auth');
+
+      $_SERVER['REDIRECT_HTTP_AUTH'] = isset($_SERVER['REDIRECT_HTTP_AUTH']) ? $_SERVER['REDIRECT_HTTP_AUTH']: null;
+
+      $token = isset($token[0]) ? $token[0] : $_SERVER['REDIRECT_HTTP_AUTH'];
+
+      Auth::validateToken($token);
+      $response = $next($request, $response);
+
+    }else{
+      $response = $next($request, $response);
+    }
+
+  }
+
+  return $response;
+});
 
 $app->run();
 ?>

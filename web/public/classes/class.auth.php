@@ -16,16 +16,16 @@ class Auth extends ClassDB implements InterfaceConfig {
   }
 
   public function auth(){
-                            # nome do campo, valor passado, tipagem do campo e se o campo é obrigatório (padrão true)
-    self::validateParameter('user', $this->user, STRING);
-    self::validateParameter('pass', $this->pass, STRING);
-
+                            # nome do campo, valor passado, tipagem do campo e se o campo é obrigatório (padrão false)
+    self::validateParameter('user', $this->user, STRING, true);
+    self::validateParameter('pass', $this->pass, STRING, true);
     $aBind[':usuario'] = $this->user;
-    $aBind[':senha'] = $this->pass;
-
-    $sql = 'SELECT * FROM users WHERE name = :usuario AND passwd = :senha';
+    $aBind[':senha'] = md5($this->pass.SALT_KEY);
+    // var_dump($aBind);
+    $sql = 'SELECT * FROM admin WHERE username = :usuario AND passwd = :senha';
 
     $curentUser = $this->select($sql, $aBind);
+
     unset($aBind);
     if(sizeof($curentUser)>0){
       // valida se o usuario esta ativo
@@ -35,7 +35,7 @@ class Auth extends ClassDB implements InterfaceConfig {
         'iat' => time(),
         'iss' => URL,
         'exp' => time() + (60*60)*24, //(60*60)*24  valido por 1 dia
-        'user' => $curentUser['codusuario']
+        'user' => $curentUser['id']
       ];
 
       $jwt = new JWT();
@@ -43,7 +43,6 @@ class Auth extends ClassDB implements InterfaceConfig {
 
       $result = ['token'=>$token,'user'=>$curentUser];
 
-      $_SESSION = $result;
 
     }else{
       self::throwError(403, 'Usuário ou senha incorreta', 'INVALID_USER_PASS');
@@ -53,20 +52,19 @@ class Auth extends ClassDB implements InterfaceConfig {
   }
 
   public static function validateToken($token){
-    //echo $token;
+
     $payload = JWT::decode($token, SALT_KEY, ['HS256']);
+     
+    $aBind[':id'] = $payload->user;
 
-    $aBind[':codusuario'] = $payload->user;
-
-    $sql = 'buscar usuário';
+    $sql = 'SELECT * FROM admin WHERE id = :id';
 
     $user = ClassDB::select($sql,$aBind);
     unset($aBind);
-    $_SESSION['user'] = $payload->user;
-    $_SESSION['bases'] =  $user;
     if (!is_array($user)) {
-      self::throwError(403, 'Usuário não foi encontrado ou está desativado.', 'USER_NOT_FOUND');
+      self::throwError(403, 'Usuário não foi encontrado.', 'USER_NOT_FOUND');
     }
+
     if($payload){
       return true;
     }
