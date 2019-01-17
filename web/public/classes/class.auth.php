@@ -23,11 +23,11 @@ class Auth extends ClassDB implements InterfaceConfig {
     $aBind[':usuario'] = $this->user;
     $aBind[':senha'] = $this->pass;
 
-    $sql = 'buscar usuario';
+    $sql = 'SELECT * FROM users WHERE name = :usuario AND passwd = :senha';
 
     $curentUser = $this->select($sql, $aBind);
     unset($aBind);
-    if($curentUser AND $curentUser[0]['situacao'] == 0){
+    if(sizeof($curentUser)>0){
       // valida se o usuario esta ativo
       $curentUser = $curentUser[0];
 
