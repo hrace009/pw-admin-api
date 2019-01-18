@@ -4,6 +4,7 @@
   define('INTEGER', '2');
   define('STRING', '3');
 
+  define('URL','http://pw-admin.thalys.com/auth');
 
 
   /*Request type*/
