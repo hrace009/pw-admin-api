@@ -93,7 +93,7 @@
       ';
 
       $res = $this->select($sSql, $aBind);
-      
+
       return $res;
     }
 
@@ -107,6 +107,21 @@
         $sSql = 'SELECT * FROM users WHERE name = :name';
         $res = $this->select($sSql, $aBind);
         unset($aBind);
+        return $res;
+      } catch (\Exception $e) {
+        echo '<pre>'.$e;
+      }
+    }
+
+    public function admin_not_exists(){
+      try {
+        $sSql = 'SELECT COUNT(*) AS "count"  FROM admin';
+        $res = $this->select($sSql);
+        (int)$count = $res[0]['count'];
+
+        if ($count> 0) {
+          $this->throwError(401, 'Já existe usuários admin');
+        }
         return $res;
       } catch (\Exception $e) {
         echo '<pre>'.$e;
