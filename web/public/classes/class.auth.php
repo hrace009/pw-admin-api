@@ -45,7 +45,7 @@ class Auth extends ClassDB implements InterfaceConfig {
 
 
     }else{
-      self::throwError(403, 'Usuário ou senha incorreta', 'INVALID_USER_PASS');
+      self::throwError(401, 'Usuário ou senha incorreta', 'INVALID_USER_PASS');
     }
 
     return $result;
@@ -62,7 +62,7 @@ class Auth extends ClassDB implements InterfaceConfig {
     $user = ClassDB::select($sql,$aBind);
     unset($aBind);
     if (!is_array($user)) {
-      self::throwError(403, 'Usuário não foi encontrado.', 'USER_NOT_FOUND');
+      self::throwError(401, 'Usuário não foi encontrado.', 'USER_NOT_FOUND');
     }
 
     if($payload){
