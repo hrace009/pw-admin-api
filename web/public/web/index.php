@@ -158,15 +158,19 @@ $app->add(function ($request, $response, $next) {
 
   }else{
     if ($_SERVER['REQUEST_URI'] !== '/auth') {
+      if ($_SERVER['REQUEST_URI'] !== '/user/admin_not_exists') {
+        $token = $request->getHeader('Auth');
 
-      $token = $request->getHeader('Auth');
+        $_SERVER['REDIRECT_HTTP_AUTH'] = isset($_SERVER['REDIRECT_HTTP_AUTH']) ? $_SERVER['REDIRECT_HTTP_AUTH']: null;
 
-      $_SERVER['REDIRECT_HTTP_AUTH'] = isset($_SERVER['REDIRECT_HTTP_AUTH']) ? $_SERVER['REDIRECT_HTTP_AUTH']: null;
+        $token = isset($token[0]) ? $token[0] : $_SERVER['REDIRECT_HTTP_AUTH'];
 
-      $token = isset($token[0]) ? $token[0] : $_SERVER['REDIRECT_HTTP_AUTH'];
+        Auth::validateToken($token);
+        $response = $next($request, $response);
+      }else{
+        $response = $next($request, $response);
+      }
 
-      Auth::validateToken($token);
-      $response = $next($request, $response);
 
     }else{
       $response = $next($request, $response);
