@@ -2,3 +2,4 @@
 /data
 composer.lock
 /web/public/classes/includes/consts.php
+.env
