@@ -128,6 +128,16 @@
       }
     }
 
+    /* @ThalysWolf
+      * O método abaixo é usado para criar o primeiro usuário admin
+      * Se não existir nenhum outro usuário, entende-se que o usuário atual é o usuário admin
+      * então é chamado o método admin_not_exists que para de executar o script caso haja mais usuários.
+    */
+    public function create_genesis_user_admin(){
+      $this->admin_not_exists();
+
+    }
+
   }
 
  ?>
